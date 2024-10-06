@@ -18,6 +18,18 @@ class OrbitingObject():
         print(f"Semi-minor axis: {self.semiminor_axis} au")
         print(f"Eccentricity: {self.eccentricity}")
 
+class CentralBody():
+    def __init__(self):
+        pass
+    def printCentralBodyValues(self):
+        print(f"Central Body: {self.name}")
+        print(f"Color: {self.color}")
+
+class Sun(CentralBody):
+    def __init__(self):
+        self.name = "Sun"
+        self.color = "#dbc70d"
+
 class Earth(OrbitingObject):
     def __init__(self):
         self.name = "Earth"
@@ -42,7 +54,10 @@ def KmToAu(aphelion_in_km, perihelion_in_km):
 
 def main():
     planet = Earth()
+    centralbody = Sun()
     planet.printOrbitingValues()
+    print("\nOrbiting: \n")
+    centralbody.printCentralBodyValues()
 
 if __name__ == "__main__":
     main()
