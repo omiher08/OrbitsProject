@@ -31,11 +31,11 @@ def polar_coordinates(orbitingobject, centralbody, ax):
     point = random.choice(range(0,n_points))
     theta_point, r_point = theta[point], r[point]
     ax.plot(theta_point, r_point, marker="o", markersize=8, color=f"{orbitingobject.color}")
-    ax.set_title(f"{orbitingobject.name}'s Orbit in polar coordinates", fontsize=10)    
+    ax.set_title(f"{orbitingobject.name}'s Orbit in polar coordinates", fontsize=10)
     ax.grid(color='gray', linestyle='--', linewidth=0.5)
 
 def main():
-    orbitingobject = Mercury()
+    orbitingobject = Earth()
     centralbody = Sun()
     orbitingobject.printOrbitingValues()
     fig = plt.figure()
