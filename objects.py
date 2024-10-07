@@ -42,8 +42,8 @@ class Mercury(OrbitingObject):
     def __init__(self):
         self.name = "Mercury"
         self.color = "#b08137"
-        self.aphelion = Decimal("0.4667007938")
-        self.perihelion = Decimal("0.3074977524")
+        self.aphelion = Decimal("0.466")
+        self.perihelion = Decimal("0.307")
         super().__init__(self.aphelion, self.perihelion)
 
 def KmToAu(aphelion_in_km, perihelion_in_km):
