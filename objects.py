@@ -1,10 +1,14 @@
 from decimal import Decimal
 import numpy as np
 
-class OrbitingObject():
-    def __init__(self, aphelion, perihelion):
-        self.semimajor_axis = round(Decimal((aphelion + perihelion)/2), 10)
-        self.focal_distance = round(Decimal(aphelion - self.semimajor_axis), 10)
+class OrbitingBody():
+    def __init__(self, name, color, aphelion, perihelion):
+        self.name = name
+        self.color = color
+        self.aphelion = Decimal(aphelion)
+        self.perihelion = Decimal(perihelion)
+        self.semimajor_axis = round(Decimal((self.aphelion + self.perihelion)/2), 10)
+        self.focal_distance = round(Decimal(self.aphelion - self.semimajor_axis), 10)
         self.semiminor_axis = round(Decimal(np.sqrt(self.semimajor_axis**2 - self.focal_distance**2)), 10)
         self.eccentricity = round(Decimal(self.focal_distance/self.semimajor_axis), 10)
         self.referenceRadius = round(Decimal(self.semiminor_axis**2 / self.semimajor_axis), 10)
@@ -19,32 +23,12 @@ class OrbitingObject():
         print(f"Eccentricity: {self.eccentricity}")
 
 class CentralBody():
-    def __init__(self):
-        pass
+    def __init__(self, name, color):
+        self.name = name
+        self.color = color
     def printCentralBodyValues(self):
         print(f"Central Body: {self.name}")
         print(f"Color: {self.color}")
-
-class Sun(CentralBody):
-    def __init__(self):
-        self.name = "Sun"
-        self.color = "#dbc70d"
-
-class Earth(OrbitingObject):
-    def __init__(self):
-        self.name = "Earth"
-        self.color = "green"
-        self.aphelion = Decimal("1.017")
-        self.perihelion = Decimal("0.983")
-        super().__init__(self.aphelion, self.perihelion)
-
-class Mercury(OrbitingObject):
-    def __init__(self):
-        self.name = "Mercury"
-        self.color = "#b08137"
-        self.aphelion = Decimal("0.466")
-        self.perihelion = Decimal("0.307")
-        super().__init__(self.aphelion, self.perihelion)
 
 def KmToAu(aphelion_in_km, perihelion_in_km):
     one_au = Decimal("149597870.7")
@@ -52,9 +36,13 @@ def KmToAu(aphelion_in_km, perihelion_in_km):
     perihelion_in_au = perihelion_in_km / one_au
     return round(aphelion_in_au, 10), round(perihelion_in_au, 10)
 
+EARTH = OrbitingBody("Earth", "green", "1.017", "0.983")
+MERCURY = OrbitingBody("Mercury", "#b08137", "0.466", "0.307")
+SUN = CentralBody("Sun", "#dbc70d")
+
 def main():
-    planet = Earth()
-    centralbody = Sun()
+    planet = EARTH
+    centralbody = SUN
     planet.printOrbitingValues()
     print("\nOrbiting: \n")
     centralbody.printCentralBodyValues()
