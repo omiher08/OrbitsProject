@@ -21,6 +21,7 @@ class OrbitingBody():
         print(f"Focal Distance: {self.focal_distance} au")
         print(f"Semi-minor axis: {self.semiminor_axis} au")
         print(f"Eccentricity: {self.eccentricity}")
+        print(f"R_0: {self.referenceRadius}")
 
 class CentralBody():
     def __init__(self, name, color):
@@ -36,8 +37,10 @@ def KmToAu(aphelion_in_km, perihelion_in_km):
     perihelion_in_au = perihelion_in_km / one_au
     return round(aphelion_in_au, 10), round(perihelion_in_au, 10)
 
-EARTH = OrbitingBody("Earth", "green", "1.017", "0.983")
 MERCURY = OrbitingBody("Mercury", "#b08137", "0.466", "0.307")
+VENUS = OrbitingBody("Venus", "#d18e08", "0.728", "0.718")
+EARTH = OrbitingBody("Earth", "green", "1.017", "0.983")
+MARS = OrbitingBody("Mars", "#ff0000", "1.665", "1.381")
 SUN = CentralBody("Sun", "#dbc70d")
 
 def main():
