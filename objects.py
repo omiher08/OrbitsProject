@@ -41,6 +41,10 @@ MERCURY = OrbitingBody("Mercury", "#b08137", "0.466", "0.307")
 VENUS = OrbitingBody("Venus", "#d18e08", "0.728", "0.718")
 EARTH = OrbitingBody("Earth", "green", "1.017", "0.983")
 MARS = OrbitingBody("Mars", "#ff0000", "1.665", "1.381")
+JUPITER = OrbitingBody("Jupiter", "#c7991c", "5.458", "4.950")
+SATURN = OrbitingBody("Saturn", "#a88932", "10.115", "9.048")
+URANUS = OrbitingBody("Uranus", "#23ccc6", "20.083", "18.375")
+NEPTUNE = OrbitingBody("Neptune", "#234dcc", "30.441", "29.766")
 SUN = CentralBody("Sun", "#dbc70d")
 
 def main():
