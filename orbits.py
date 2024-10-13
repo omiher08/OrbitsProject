@@ -1,7 +1,7 @@
-from objects import *
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+from objects import *
 
 def cartesian_coordinates(orbitingBody, centralBody, ax):
     n_points = 10000
