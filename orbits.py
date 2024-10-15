@@ -12,8 +12,8 @@ def cartesian_coordinates(orbitingBody, centralBody, ax):
     ax.plot(-orbitingBody.focal_distance, 0, marker="o", markersize=8, label=centralBody.name, color=centralBody.color)
     point = random.choice(range(0,n_points))
     x_point, y_point = x[point], y[point]
-    y_axis_of_earth = random.choice(["+", "-"])
-    if y_axis_of_earth == "-":
+    y_axis_of_object = random.choice(["+", "-"])
+    if y_axis_of_object == "-":
         y_point = -y_point
     ax.plot(x_point, y_point, marker="o", markersize=8, label=f"{orbitingBody.name}", color=f"{orbitingBody.color}")
     ax.axis("equal")
@@ -29,8 +29,7 @@ def polar_coordinates(orbitingBody, centralBody, ax):
     ax.plot(theta, r, color="#2f7bf5")
     ax.plot(0, 0, marker="o", markersize=8, color=centralBody.color)
     point = random.choice(range(0,n_points))
-    theta_point, r_point = theta[point], r[point]
-    ax.plot(theta_point, r_point, marker="o", markersize=8, color=f"{orbitingBody.color}")
+    ax.plot(theta[point], r[point], marker="o", markersize=8, color=f"{orbitingBody.color}")
     ax.set_title(f"{orbitingBody.name}'s Orbit in polar coordinates", fontsize=10)
     ax.grid(color='gray', linestyle='--', linewidth=0.5)
 
