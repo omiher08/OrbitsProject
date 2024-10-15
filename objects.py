@@ -37,7 +37,7 @@ def KmToAu(aphelion_in_km, perihelion_in_km):
     perihelion_in_au = perihelion_in_km / one_au
     return round(aphelion_in_au, 10), round(perihelion_in_au, 10)
 
-MERCURY = OrbitingBody("Mercury", "#b08137", "0.466", "0.307")
+MERCURY = OrbitingBody("Mercury", "#918b8a", "0.466", "0.307")
 VENUS = OrbitingBody("Venus", "#d18e08", "0.728", "0.718")
 EARTH = OrbitingBody("Earth", "green", "1.017", "0.983")
 MARS = OrbitingBody("Mars", "#ff0000", "1.665", "1.381")
