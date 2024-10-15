@@ -46,6 +46,7 @@ SATURN = OrbitingBody("Saturn", "#a88932", "10.115", "9.048")
 URANUS = OrbitingBody("Uranus", "#23ccc6", "20.083", "18.375")
 NEPTUNE = OrbitingBody("Neptune", "#234dcc", "30.441", "29.766")
 SUN = CentralBody("Sun", "#dbc70d")
+PLANETS = [MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE]
 
 def main():
     planet = EARTH
