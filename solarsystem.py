@@ -12,10 +12,9 @@ def solarsystem(orbitingBody, ax):
     ax.plot(theta[point], r[point], marker="o", markersize=3, label=orbitingBody.name, color=f"{orbitingBody.color}")
 
 def main():
-    planets = [MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE]
     fig = plt.figure()
     s1 = fig.add_subplot(1, 1, 1, polar=True)
-    for planet in planets:
+    for planet in PLANETS:
         solarsystem(planet, s1)
     s1.plot(0, 0, marker="o", markersize=3, label=SUN.name, color=SUN.color)
     s1.grid(color='gray', linestyle='--', linewidth=0.5)
