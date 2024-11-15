@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 import random
 from objects import *
 
+dt = 1
+
+def verlet(current_position, last_position, acceleration, deltaT):
+    return 2*current_position-last_position+acceleration*deltaT**2
+
 def is_decimal(number):
     try:
         float(number)
