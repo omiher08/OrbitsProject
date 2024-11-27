@@ -2,6 +2,7 @@ from decimal import Decimal
 import numpy as np
 
 G = Decimal("6.67e-11") #(N * m^2) / kg^2
+UA = Decimal("149597870700")
 
 class OrbitingBody():
     def __init__(self, name, color, aphelion, perihelion, mass):
