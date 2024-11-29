@@ -2,7 +2,7 @@ from decimal import Decimal
 import numpy as np
 
 G = Decimal("6.67e-11") #(N * m^2) / kg^2
-UA = Decimal("149597870700")
+UA_meters = Decimal("149597870700") #In meters
 
 class OrbitingBody():
     def __init__(self, name, color, aphelion, perihelion, mass):
@@ -50,7 +50,7 @@ JUPITER = OrbitingBody("Jupiter", "#c7991c", "5.458", "4.950", "1")
 SATURN = OrbitingBody("Saturn", "#a88932", "10.115", "9.048", "1")
 URANUS = OrbitingBody("Uranus", "#23ccc6", "20.083", "18.375", "1")
 NEPTUNE = OrbitingBody("Neptune", "#234dcc", "30.441", "29.766", "1")
-SUN = CentralBody("Sun", "#dbc70d", "1.98e30")
+SUN = CentralBody("Sun", "#dbc70d", "1.989e30")
 PLANETS = [MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE]
 
 def main():
