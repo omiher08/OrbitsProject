@@ -10,7 +10,7 @@ class OrbitingBody():
         self.color = color
         self.aphelion = Decimal(aphelion)
         self.perihelion = Decimal(perihelion)
-        self.mass = Decimal(mass)
+        self.mass = Decimal(mass) #In Kilograms
         self.semimajor_axis = round(Decimal((self.aphelion + self.perihelion)/2), 10)
         self.focal_distance = round(Decimal(self.aphelion - self.semimajor_axis), 10)
         self.semiminor_axis = round(Decimal(np.sqrt(self.semimajor_axis**2 - self.focal_distance**2)), 10)
