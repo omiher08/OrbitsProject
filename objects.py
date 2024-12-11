@@ -42,14 +42,14 @@ def KmToAu(aphelion_in_km, perihelion_in_km):
     perihelion_in_au = perihelion_in_km / one_au
     return round(aphelion_in_au, 10), round(perihelion_in_au, 10)
 
-MERCURY = OrbitingBody("Mercury", "#918b8a", "0.466", "0.307", "1")
-VENUS = OrbitingBody("Venus", "#d18e08", "0.728", "0.718", "1")
+MERCURY = OrbitingBody("Mercury", "#918b8a", "0.466", "0.307", "330104e18")
+VENUS = OrbitingBody("Venus", "#d18e08", "0.728", "0.718", "4867320e18")
 EARTH = OrbitingBody("Earth", "green", "1.017", "0.983", "5.972e24")
-MARS = OrbitingBody("Mars", "#ff0000", "1.665", "1.381", "1")
-JUPITER = OrbitingBody("Jupiter", "#c7991c", "5.458", "4.950", "1")
-SATURN = OrbitingBody("Saturn", "#a88932", "10.115", "9.048", "1")
-URANUS = OrbitingBody("Uranus", "#23ccc6", "20.083", "18.375", "1")
-NEPTUNE = OrbitingBody("Neptune", "#234dcc", "30.441", "29.766", "1")
+MARS = OrbitingBody("Mars", "#ff0000", "1.665", "1.381", "641693e18")
+JUPITER = OrbitingBody("Jupiter", "#c7991c", "5.458", "4.950", "1898130e21")
+SATURN = OrbitingBody("Saturn", "#a88932", "10.115", "9.048", "568319e21")
+URANUS = OrbitingBody("Uranus", "#23ccc6", "20.083", "18.375", "86810300e18")
+NEPTUNE = OrbitingBody("Neptune", "#234dcc", "30.441", "29.766", "102412e21")
 SUN = CentralBody("Sun", "#dbc70d", "1.989e30")
 PLANETS = [MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE]
 

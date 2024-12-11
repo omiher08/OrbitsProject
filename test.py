@@ -2,13 +2,14 @@ from objects import EARTH, SUN, G, UA_meters
 from orbits import verlet
 import numpy as np
 from decimal import Decimal
+import matplotlib.animation as animation
 
 def acceleration(centralBodymass, x_difference, y_difference, distance):
     a_x = ((G*centralBodymass*(x_difference))/distance**3) * 86400**2/UA_meters #Ua/Dia**2
     a_y = ((G*centralBodymass*(y_difference))/distance**3)* 86400**2/UA_meters #Ua/Dia**2
     return a_x, a_y
 
-def simulation(orbitingBody = EARTH, centralBody = SUN, ax = None):
+def simulation(orbitingBody, centralBody, ax, fig):
     dt = 1
     perihelion_in_m = orbitingBody.perihelion * UA_meters
     aphelion_in_m = orbitingBody.aphelion * UA_meters
@@ -21,8 +22,13 @@ def simulation(orbitingBody = EARTH, centralBody = SUN, ax = None):
     x_positions = [x_0, x_1]
     y_positions = [y_0, y_1]
     orbital_period = (2*Decimal(np.pi)*np.sqrt(((orbitingBody.semimajor_axis*UA_meters)**3)/(G*centralBody.mass)))/86400 #In Days
-
-    for day in range(int(orbital_period) - 1):
+    
+    ax.axis("equal")
+    ax.grid()
+    ax.plot(-orbitingBody.focal_distance, 0, marker="o", markersize=8, color=centralBody.color)        
+    line, = ax.plot(x_positions, y_positions, color=orbitingBody.color)
+    
+    def animate(i, orbitingBody, centralBody, x_positions, y_positions, line):
         current_x = x_positions[-1]
         current_y = y_positions[-1]
         previous_x = x_positions[-2]
@@ -35,5 +41,8 @@ def simulation(orbitingBody = EARTH, centralBody = SUN, ax = None):
         next_y = verlet(current_y, previous_y, a_y, dt)
         x_positions.append(next_x)
         y_positions.append(next_y)
-
-simulation()
+        line.set_data(x_positions, y_positions)
+        return line,
+        
+    ani = animation.FuncAnimation(fig, animate, frames=int(orbital_period) - 1, fargs=(orbitingBody, centralBody, x_positions, y_positions, line), blit=True, interval=1)
+    return ani
