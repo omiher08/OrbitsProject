@@ -87,12 +87,8 @@ def simulation(orbitingBody, centralBody, ax, fig):
     x_positions = [x_0, x_1]
     y_positions = [y_0, y_1]
     orbital_period = (2*Decimal(np.pi)*np.sqrt(((orbitingBody.semimajor_axis*UA_meters)**3)/(G*centralBody.mass)))/86400 #In Days
-    
-    ax.axis("equal")
-    ax.grid()
-    ax.plot(-orbitingBody.focal_distance, 0, marker="o", markersize=8, color=centralBody.color)
        
-    for day in range(int(orbital_period)):
+    for day in range(int(orbital_period)+1):
         current_x = x_positions[-1]
         current_y = y_positions[-1]
         previous_x = x_positions[-2]
@@ -105,8 +101,24 @@ def simulation(orbitingBody, centralBody, ax, fig):
         next_y = verlet(current_y, previous_y, a_y, dt)
         x_positions.append(next_x)
         y_positions.append(next_y)
+        
+    planet_position, = ax.plot([], [], color=orbitingBody.color)
     
-    ax.plot(x_positions, y_positions, color="#2f7bf5") #Variar color
+    def animate(i):
+        x = x_positions[:i]
+        y = y_positions[:i]
+        planet_position.set_data(x, y)
+        return planet_position,
+    
+    ax.set_xlim(min(x_positions), max(x_positions))
+    ax.set_ylim(min(y_positions), max(y_positions))
+    ani = animation.FuncAnimation(fig, animate, int(orbital_period)+3, blit=True, interval=0.1, repeat=False)
+    
+    #ax.plot(x_positions, y_positions, color="#2f7bf5") #Variar color
+    ax.plot(-orbitingBody.focal_distance, 0, marker="o", markersize=8, color=centralBody.color)
+    ax.grid()
+    ax.set_aspect('equal', adjustable='box')
+    return ani
 
 def main():
     while True:
@@ -152,7 +164,7 @@ Choose (1-9): """).strip())
     s4 = fig.add_subplot(2, 2, 4)
     cartesian_coordinates(orbitingBody, centralBody, s1)
     polar_coordinates(orbitingBody, centralBody, s2)
-    simulation(orbitingBody, centralBody, s3, fig)
+    ani = simulation(orbitingBody, centralBody, s3, fig)
     fig.legend()
     plt.tight_layout()
     plt.show()

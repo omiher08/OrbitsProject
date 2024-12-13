@@ -22,13 +22,8 @@ def simulation(orbitingBody, centralBody, ax, fig):
     x_positions = [x_0, x_1]
     y_positions = [y_0, y_1]
     orbital_period = (2*Decimal(np.pi)*np.sqrt(((orbitingBody.semimajor_axis*UA_meters)**3)/(G*centralBody.mass)))/86400 #In Days
-    
-    ax.axis("equal")
-    ax.grid()
-    ax.plot(-orbitingBody.focal_distance, 0, marker="o", markersize=8, color=centralBody.color)        
-    line, = ax.plot(x_positions, y_positions, color=orbitingBody.color)
-    
-    def animate(i, orbitingBody, centralBody, x_positions, y_positions, line):
+       
+    for day in range(int(orbital_period)+1):
         current_x = x_positions[-1]
         current_y = y_positions[-1]
         previous_x = x_positions[-2]
@@ -41,8 +36,25 @@ def simulation(orbitingBody, centralBody, ax, fig):
         next_y = verlet(current_y, previous_y, a_y, dt)
         x_positions.append(next_x)
         y_positions.append(next_y)
-        line.set_data(x_positions, y_positions)
-        return line,
         
-    ani = animation.FuncAnimation(fig, animate, frames=int(orbital_period) - 1, fargs=(orbitingBody, centralBody, x_positions, y_positions, line), blit=True, interval=1)
+    planet_position, = ax.plot([], [], color=orbitingBody.color)
+    
+    def animate(i):
+        x = x_positions[:i]
+        y = y_positions[:i]
+        planet_position.set_data(x, y)
+        return planet_position,
+    
+    ax.set_xlim(min(x_positions), max(x_positions))
+    ax.set_ylim(min(y_positions), max(y_positions))
+    ani = animation.FuncAnimation(fig, animate, int(orbital_period)+3, blit=True, interval=0.1, repeat=False)
+    
+    #ax.plot(x_positions, y_positions, color="#2f7bf5") #Variar color
+    ax.plot(-orbitingBody.focal_distance, 0, marker="o", markersize=8, color=centralBody.color)
+    ax.grid()
+    ax.set_aspect('equal', adjustable='box')
     return ani
+
+#1. Intervalo varia dependiendo de la cantidad de puntos
+#2. Calcular antes y simplemente mostrar
+#3. Formula para la relación de aspecto
