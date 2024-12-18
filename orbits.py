@@ -57,7 +57,9 @@ def cartesian_coordinates(orbitingBody, centralBody, ax):
     if y_axis_of_object == "-":
         y_point = -y_point
     ax.plot(x_point, y_point, marker="o", markersize=8, label=f"{orbitingBody.name}", color=f"{orbitingBody.color}")
-    ax.axis("equal")
+    ax.set_xlim(min(x)-Decimal(0.5), max(x)+Decimal(0.5))
+    ax.set_ylim(min(-y)-Decimal(0.5), max(y)+Decimal(0.5))
+    ax.set_aspect('equal', adjustable='box')
     ax.set_title(f"{orbitingBody.name}'s Orbit in cartesian coordinates", fontsize=10)
     ax.set_xlabel("X (au)")
     ax.set_ylabel("Y (au)")
@@ -102,7 +104,7 @@ def simulation(orbitingBody, centralBody, ax, fig):
         x_positions.append(next_x)
         y_positions.append(next_y)
         
-    planet_position, = ax.plot([], [], color=orbitingBody.color)
+    planet_position, = ax.plot([], [], color="red")
     
     def animate(i):
         x = x_positions[:i]
@@ -110,14 +112,12 @@ def simulation(orbitingBody, centralBody, ax, fig):
         planet_position.set_data(x, y)
         return planet_position,
     
-    ax.set_xlim(min(x_positions), max(x_positions))
-    ax.set_ylim(min(y_positions), max(y_positions))
     ani = animation.FuncAnimation(fig, animate, int(orbital_period)+3, blit=True, interval=0.1, repeat=False)
-    
-    #ax.plot(x_positions, y_positions, color="#2f7bf5") #Variar color
-    ax.plot(-orbitingBody.focal_distance, 0, marker="o", markersize=8, color=centralBody.color)
-    ax.grid()
+    ax.plot(-orbitingBody.focal_distance, 0, marker="o", markersize=8, color=centralBody.color) #See
+    ax.set_xlim(min(x_positions)-Decimal(0.5), max(x_positions)+Decimal(0.5))
+    ax.set_ylim(min(y_positions)-Decimal(0.5), max(y_positions)+Decimal(0.5))
     ax.set_aspect('equal', adjustable='box')
+    ax.grid()
     return ani
 
 def main():
