@@ -8,8 +8,8 @@ def verlet(current_position, last_position, acceleration, deltaT):
     return 2*current_position-last_position+acceleration*deltaT**2
 
 def acceleration(centralBodymass, x_difference, y_difference, distance):
-    a_x = ((G*centralBodymass*(x_difference))/distance**3) * 86400**2/UA_meters #Ua/Dia**2
-    a_y = ((G*centralBodymass*(y_difference))/distance**3)* 86400**2/UA_meters #Ua/Dia**2
+    a_x = ((G*centralBodymass*(x_difference))/distance**3) * 86400**2/UA_meters #UA/Day**2
+    a_y = ((G*centralBodymass*(y_difference))/distance**3)* 86400**2/UA_meters #UA/Day**2
     return a_x, a_y
 
 def is_decimal(number):
@@ -22,22 +22,22 @@ def is_decimal(number):
 def generate_personalized():
     object_name = input("\nEnter object's name: ").strip().capitalize()
     while True:
-        object_aphelion = input("Enter object's aphelion in au (Use '.' for decimals): ").strip().capitalize()
+        object_aphelion = input("\nEnter object's aphelion in au (Use '.' for decimals): ").strip().capitalize()
         ok = is_decimal(object_aphelion)
         if ok:
             break
         else:
-            print("\nNot a valid aphelion")
+            print("Not a valid aphelion")
     while True:
-        object_perihelion = input("Enter object's perihelion in au (Use '.' for decimals): ").strip().capitalize()
+        object_perihelion = input("\nEnter object's perihelion in au (Use '.' for decimals): ").strip().capitalize()
         ok = is_decimal(object_perihelion)
         if ok:
             break
         else:
-            print("\nNot a valid perihelion")
+            print("Not a valid perihelion")
     orbitingBody = OrbitingBody(object_name, "black", object_aphelion, object_perihelion)
     centralBody_name = input("\nEnter central body's name (body that your object orbits) (Write 'Sun' if the central body is the sun): ").strip().capitalize()
-    if centralBody_name == "Sun":
+    if centralBody_name.upper() == "SUN":
         centralBody = SUN
     else:
         centralBody = CentralBody(centralBody_name, "#918c8c")
@@ -64,6 +64,7 @@ def cartesian_coordinates(orbitingBody, centralBody, ax):
     ax.set_xlabel("X (au)")
     ax.set_ylabel("Y (au)")
     ax.grid()
+    return x, y
 
 def polar_coordinates(orbitingBody, centralBody, ax):
     n_points = 10000
@@ -90,7 +91,7 @@ def simulation(orbitingBody, centralBody, ax, fig):
     y_positions = [y_0, y_1]
     orbital_period = (2*Decimal(np.pi)*np.sqrt(((orbitingBody.semimajor_axis*UA_meters)**3)/(G*centralBody.mass)))/86400 #In Days
        
-    for day in range(int(orbital_period)+1):
+    for day in range(int(orbital_period)):
         current_x = x_positions[-1]
         current_y = y_positions[-1]
         previous_x = x_positions[-2]
@@ -104,21 +105,66 @@ def simulation(orbitingBody, centralBody, ax, fig):
         x_positions.append(next_x)
         y_positions.append(next_y)
         
-    planet_position, = ax.plot([], [], color="red")
+    total_points = len(x_positions)
+    desired_points = 1100
+    
+    if total_points > desired_points:
+        step = total_points // desired_points + 1
+        reduced_x_positions = x_positions[::step]
+        reduced_y_positions = y_positions[::step]
+        reduced_x_positions.append(x_positions[-1])  # Ensure the last point is included
+        reduced_y_positions.append(y_positions[-1])  # Ensure the last point is included
+    else:
+        reduced_x_positions = x_positions
+        reduced_y_positions = y_positions
+        
+    planet_position, = ax.plot([], [], "o", color=orbitingBody.color, markersize=8)
+    planet_orbit, = ax.plot([], [], color="#2f7bf5")
     
     def animate(i):
-        x = x_positions[:i]
-        y = y_positions[:i]
-        planet_position.set_data(x, y)
-        return planet_position,
+        x = reduced_x_positions[i]
+        y = reduced_y_positions[i]
+        planet_position.set_data([x], [y])
+        
+        planet_orbit.set_data(reduced_x_positions[:i], reduced_y_positions[:i])
+        
+        return planet_orbit, planet_position
     
-    ani = animation.FuncAnimation(fig, animate, int(orbital_period)+3, blit=True, interval=0.1, repeat=False)
-    ax.plot(-orbitingBody.focal_distance, 0, marker="o", markersize=8, color=centralBody.color) #See
+    def calculate_interval(n):
+        if n <= 230:
+            return 12
+        elif n <= 360:
+            return 8
+        elif n <= 500:
+            return 2
+        else:
+            return 0.1
+    
+    set_interval = calculate_interval(len(reduced_x_positions))
+    
+    ani = animation.FuncAnimation(fig, animate, frames=len(reduced_x_positions), blit=True, interval=set_interval, repeat=True)
+    ax.plot(-orbitingBody.focal_distance, 0, marker="o", markersize=8, color=centralBody.color)    
     ax.set_xlim(min(x_positions)-Decimal(0.5), max(x_positions)+Decimal(0.5))
     ax.set_ylim(min(y_positions)-Decimal(0.5), max(y_positions)+Decimal(0.5))
     ax.set_aspect('equal', adjustable='box')
+    ax.set_title(f"{orbitingBody.name}'s Orbit using Gravitational Equations and Verlet", fontsize=10)
+    ax.set_xlabel("X (au)")
+    ax.set_ylabel("Y (au)")
     ax.grid()
-    return ani
+    return ani, x_positions, y_positions
+
+def overlapping(orbitingBody, centralBody, ax, fig, geometric_x, geometric_y, verlet_x, verlet_y):
+    ax.plot(geometric_x, geometric_y, color="#24d6b0", label="Geometric Orbit in Comparison")
+    ax.plot(verlet_x, verlet_y, color="#ff0000", label="Gravitational Equations and Verlet Orbit in Comparison")
+    ax.plot(-orbitingBody.focal_distance, 0, marker="o", markersize=8, color=centralBody.color)
+    ax.set_xlim(min(verlet_x)-Decimal(0.5), max(verlet_x)+Decimal(0.5))
+    ax.set_ylim(min(verlet_y)-Decimal(0.5), max(verlet_y)+Decimal(0.5))
+    ax.set_aspect('equal', adjustable='box')
+    ax.set_title(f"{orbitingBody.name}'s Orbits Comparison", fontsize=10)
+    ax.set_xlabel("X (au)")
+    ax.set_ylabel("Y (au)")
+    ax.grid()
+    
 
 def main():
     while True:
@@ -162,9 +208,10 @@ Choose (1-9): """).strip())
     s2 = fig.add_subplot(2, 2, 2, polar=True)
     s3 = fig.add_subplot(2, 2, 3)
     s4 = fig.add_subplot(2, 2, 4)
-    cartesian_coordinates(orbitingBody, centralBody, s1)
+    geometric_x_positions, geometric_y_positions = cartesian_coordinates(orbitingBody, centralBody, s1)
     polar_coordinates(orbitingBody, centralBody, s2)
-    ani = simulation(orbitingBody, centralBody, s3, fig)
+    ani, verlet_x_positions, verlet_y_positions = simulation(orbitingBody, centralBody, s3, fig)
+    overlapping(orbitingBody, centralBody, s4, fig, geometric_x_positions, geometric_y_positions, verlet_x_positions, verlet_y_positions)
     fig.legend()
     plt.tight_layout()
     plt.show()
