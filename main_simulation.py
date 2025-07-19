@@ -12,38 +12,6 @@ def acceleration(centralBodymass, x_difference, y_difference, distance):
     a_y = ((G*centralBodymass*(y_difference))/distance**3)* 86400**2/UA_meters #UA/Day**2
     return a_x, a_y
 
-def is_decimal(number):
-    try:
-        float(number)
-        return True
-    except ValueError:
-        return False
-    
-def generate_personalized():
-    object_name = input("\nEnter object's name: ").strip().capitalize()
-    while True:
-        object_aphelion = input("\nEnter object's aphelion in au (Use '.' for decimals): ").strip().capitalize()
-        ok = is_decimal(object_aphelion)
-        if ok:
-            break
-        else:
-            print("Not a valid aphelion")
-    while True:
-        object_perihelion = input("\nEnter object's perihelion in au (Use '.' for decimals): ").strip().capitalize()
-        ok = is_decimal(object_perihelion)
-        if ok:
-            break
-        else:
-            print("Not a valid perihelion")
-    orbitingBody = OrbitingBody(object_name, "black", object_aphelion, object_perihelion)
-    centralBody_name = input("\nEnter central body's name (body that your object orbits) (Write 'Sun' if the central body is the sun): ").strip().capitalize()
-    if centralBody_name.upper() == "SUN":
-        centralBody = SUN
-    else:
-        centralBody = CentralBody(centralBody_name, "#918c8c")
-    
-    return orbitingBody, centralBody
-
 def cartesian_coordinates(orbitingBody, centralBody, ax):
     n_points = 10000
     x = np.linspace(-orbitingBody.semimajor_axis, orbitingBody.semimajor_axis, n_points)
@@ -165,7 +133,6 @@ def overlapping(orbitingBody, centralBody, ax, fig, geometric_x, geometric_y, ve
     ax.set_ylabel("Y (au)")
     ax.grid()
     
-
 def main():
     while True:
         try:
@@ -187,15 +154,10 @@ def main():
                             
 8. Neptune
                             
-9. Custom
-                            
-Choose (1-9): """).strip())
-            if 0 < ask < 10:
-                if ask == 9:
-                    orbitingBody, centralBody = generate_personalized()
-                else:
-                    orbitingBody = PLANETS[ask-1]
-                    centralBody = SUN
+Choose (1-8): """).strip())
+            if 0 < ask < 9:
+                orbitingBody = PLANETS[ask-1]
+                centralBody = SUN
                 print()
                 break
             else:
