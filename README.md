@@ -1,4 +1,4 @@
-# Planetary Orbit Plotter
+# Modeling and Simulation of Planetary Orbits
 ## 🛰️ Project Description
 This project seeks to answer a fundamental question: is it possible to accurately plot a planet's orbit knowing only its aphelion, perihelion, and mass?
 
